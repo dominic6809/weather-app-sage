@@ -85,17 +85,17 @@ class OpenWeatherMapService
     * @param string $query City name to search for
     * @return array List of matching cities
     */
-   public function searchCity($query)
-   {
-       // No caching for city search as results may change
-       $response = Http::baseUrl("{$this->geoUrl}direct", [
-           'q' => $query,
-           'limit' => 5, // Limit results to top 5 matches
-           'appid' => $this->apiKey,
-       ]);
-       
-       return $response->json();
-   }
+    public function searchCity($query)
+    {
+        // No caching for city search as results may change
+        $response = Http::get("{$this->geoUrl}direct", [
+            'q' => $query,
+            'limit' => 5, // Limit results to top 5 matches
+            'appid' => $this->apiKey,
+        ]);
+        
+        return $response->json();
+    }
 
    /**
     * Process raw forecast data into a simplified 3-day format

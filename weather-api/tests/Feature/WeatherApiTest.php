@@ -14,7 +14,7 @@ class WeatherApiTest extends TestCase
     {
         // Mock a successful response from the OpenWeatherMap API
         Http::fake([
-            'api.openweathermap.org/geo/1.0/direct' => Http::response([
+            '*api.openweathermap.org/geo/1.0/direct*' => Http::response([
                 [
                     'name' => 'Nairobi',
                     'lat' => -1.286389,
