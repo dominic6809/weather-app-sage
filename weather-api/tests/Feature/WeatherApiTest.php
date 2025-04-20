@@ -12,7 +12,7 @@ class WeatherApiTest extends TestCase
      */
     public function test_api_returns_successful_response(): void
     {
-        // Mock a successful response for the OpenWeatherMap API
+        // Mock a successful response from the OpenWeatherMap API
         Http::fake([
             'api.openweathermap.org/geo/1.0/direct' => Http::response([
                 [
@@ -25,7 +25,7 @@ class WeatherApiTest extends TestCase
         ]);
 
         // Send a request to your API endpoint
-        $response = $this->getJson('/api/geocoding?q=Nairobi');
+        $response = $this->get('/api/geocoding?q=Nairobi');  // Use `get` instead of `getJson`
 
         // Assert the response has a 200 status code
         $response->assertStatus(200);
@@ -54,4 +54,3 @@ class WeatherApiTest extends TestCase
         ]);
     }
 }
-
