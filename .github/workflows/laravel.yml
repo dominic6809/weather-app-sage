@@ -21,23 +21,29 @@ jobs:
         coverage: none
 
     - name: Copy .env
+      working-directory: ./weather-api
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
-    - name: Install Dependencies
+    - name: Install Composer Dependencies
+      working-directory: ./weather-api
       run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
     - name: Generate Application Key
+      working-directory: ./weather-api
       run: php artisan key:generate
 
     - name: Set Directory Permissions
+      working-directory: ./weather-api
       run: chmod -R 777 storage bootstrap/cache
 
     - name: Create SQLite Database
+      working-directory: ./weather-api
       run: |
         mkdir -p database
         touch database/database.sqlite
 
-    - name: Run Tests (PHPUnit/Pest)
+    - name: Run Laravel Tests
+      working-directory: ./weather-api
       env:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
