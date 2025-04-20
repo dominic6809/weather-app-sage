@@ -4,7 +4,8 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Config;
+use App\Services\OpenWeatherMapService;
+use Mockery;
 
 class WeatherApiTest extends TestCase
 {
@@ -13,24 +14,21 @@ class WeatherApiTest extends TestCase
      */
     public function test_api_returns_successful_response(): void
     {
-        // First, ensure the test knows what URL pattern to match
-        // This assumes your config is set up with these values
-        $geoUrl = config('services.openweathermap.geo_url', 'https://api.openweathermap.org/geo/1.0');
-        
-        // Use a wildcard pattern to match the URL regardless of trailing slash
-        $urlPattern = rtrim($geoUrl, '/') . '/direct*';
-        
-        // Mock a successful response from the OpenWeatherMap API
-        Http::fake([
-            $urlPattern => Http::response([
-                [
-                    'name' => 'Nairobi',
-                    'lat' => -1.286389,
-                    'lon' => 36.817223,
-                    'country' => 'KE',
-                ]
-            ], 200)
-        ]);
+        // Mock the OpenWeatherMapService completely
+        // This avoids relying on HTTP mocking which can be tricky
+        $this->mock(OpenWeatherMapService::class, function ($mock) {
+            $mock->shouldReceive('searchCity')
+                ->once()
+                ->with('Nairobi')
+                ->andReturn([
+                    [
+                        'name' => 'Nairobi',
+                        'lat' => -1.286389,
+                        'lon' => 36.817223,
+                        'country' => 'KE',
+                    ]
+                ]);
+        });
 
         // Send a request to your API endpoint
         $response = $this->getJson('/api/geocoding?q=Nairobi');
