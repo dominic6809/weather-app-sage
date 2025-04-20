@@ -25,7 +25,7 @@ class WeatherApiTest extends TestCase
         ]);
 
         // Send a request to your API endpoint
-        $response = $this->get('/api/geocoding?q=Nairobi');  // Use `get` instead of `getJson`
+        $response = $this->getJson('/api/geocoding?q=Nairobi');
 
         // Assert the response has a 200 status code
         $response->assertStatus(200);
