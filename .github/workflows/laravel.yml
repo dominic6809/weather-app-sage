@@ -24,6 +24,10 @@ jobs:
       working-directory: ./weather-api
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
+    - name: Inject API Key into .env
+      working-directory: ./weather-api
+      run: echo "OPENWEATHER_API_KEY=${{ secrets.OPENWEATHER_API_KEY }}" >> .env
+
     - name: Install Composer Dependencies
       working-directory: ./weather-api
       run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
