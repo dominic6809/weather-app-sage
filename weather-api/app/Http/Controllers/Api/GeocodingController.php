@@ -41,10 +41,15 @@ class GeocodingController extends Controller
        if (!$query) {
            return response()->json(['error' => 'Query parameter is required'], 400);
        }
-       
+
        // Delegate the actual search to the weather service
        $cities = $this->weatherService->searchCity($query);
-       
+
+       // Handle empty results
+       if (empty($cities)) {
+           return response()->json(['error' => 'No cities found for the given query'], 404);
+       }
+
        // Return results as JSON response
        return response()->json($cities);
    }
