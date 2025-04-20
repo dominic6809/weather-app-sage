@@ -87,8 +87,9 @@ class OpenWeatherMapService
     */
     public function searchCity($query)
     {
-        // No caching for city search as results may change
-        $response = Http::get("{$this->geoUrl}direct", [
+        $url = rtrim($this->geoUrl, '/') . '/direct';
+        
+        $response = Http::get($url, [
             'q' => $query,
             'limit' => 5, // Limit results to top 5 matches
             'appid' => $this->apiKey,

@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Config;
 
 class WeatherApiTest extends TestCase
 {
@@ -12,9 +13,16 @@ class WeatherApiTest extends TestCase
      */
     public function test_api_returns_successful_response(): void
     {
+        // First, ensure the test knows what URL pattern to match
+        // This assumes your config is set up with these values
+        $geoUrl = config('services.openweathermap.geo_url', 'https://api.openweathermap.org/geo/1.0');
+        
+        // Use a wildcard pattern to match the URL regardless of trailing slash
+        $urlPattern = rtrim($geoUrl, '/') . '/direct*';
+        
         // Mock a successful response from the OpenWeatherMap API
         Http::fake([
-            '*api.openweathermap.org/geo/1.0/direct*' => Http::response([
+            $urlPattern => Http::response([
                 [
                     'name' => 'Nairobi',
                     'lat' => -1.286389,
